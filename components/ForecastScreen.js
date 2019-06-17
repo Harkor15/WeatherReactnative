@@ -49,21 +49,21 @@ class ForecastScreen extends PureComponent {
     render() {
         return (
             <AppConsumer>
-                {({ temperatureUnit,forecastObject }) => {
-                    if(forecastObject==null){
+                {({ temperatureUnit, forecastObject }) => {
+                    if (forecastObject == null) {
                         return null;
                     }
                     return (
-                        <View style={{ flex: 1 }}>
+                        <View style={styles.fullFlex}>
                             <FlatList
-                                style={{ flex: 1 }} data={forecastObject.weatherList}
-                                    renderItem={({ item }) =>
-                                    <View style={{ width: '100%', borderBottomWidth: 3, borderColor: 'red' }}>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <View style={{ flexDirection: 'column', flex: 1, justifyContent: "flex-start" }}>
+                                style={styles.fullFlex} data={forecastObject.weatherList}
+                                renderItem={({ item }) =>
+                                    <View style={styles.itemMainView}>
+                                        <View style={styles.rowFlex}>
+                                            <View style={styles.itemImageVIew}>
                                                 {this.generateWeatherIcon(item.main)}
                                             </View>
-                                            <View style={{ flex: 1, justifyContent: "center" }}>
+                                            <View style={styles.detailsSection}>
                                                 <Text> Temperature {this.calculateTemperatureUnit(item.temp, temperatureUnit)}</Text>
                                                 <Text> Clouds {item.clouds} %</Text>
                                                 <Text> Pressure {item.pressure} hPa</Text>
@@ -86,7 +86,28 @@ const styles = {
     iconStyles: {
         height: 150,
         width: 150,
+    }, fullFlex: {
+        flex: 1
+    },
+    rowFlex: {
+        flexDirection: 'row'
+    },
+    itemMainView: {
+        width: '100%',
+        borderBottomWidth: 3,
+        borderColor: 'red'
+    },
+    itemImageVIew: {
+        flexDirection: 'column',
+        flex: 1,
+        justifyContent: "flex-start"
+    },
+    detailsSection: {
+        flex: 1,
+        justifyContent: "center"
     }
+
+
 
 }
 

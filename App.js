@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Router, Scene, Stack } from 'react-native-router-flux';
+import { Router, Scene } from 'react-native-router-flux';
 import MapScreen from './components/MapScreen'
 import ForecastScreen from './components/ForecastScreen'
 import CurrentWeather from './components/CurrentWeather';
@@ -19,7 +19,6 @@ export default class App extends Component {
             <Scene key="screen3" component={MapScreen} title="Map" hideNavBar />
             <Scene key="settings" component={SettingsScreen} title="Settings" hideNavBar />
           </Scene>
-
         </Router>
       </AppProvider>
     );

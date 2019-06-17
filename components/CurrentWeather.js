@@ -3,10 +3,6 @@ import { Text, Image, View, TouchableOpacity, Alert, Context } from 'react-nativ
 import { AppConsumer } from './AppContext';
 
 
-
-
-
-
 class CurrentWeather extends PureComponent {
 
     calculateTemperatureUnit = (temp, temperatureUnit) => {
@@ -47,7 +43,6 @@ class CurrentWeather extends PureComponent {
                 return <Image source={require('./res/clouds.png')} style={styles.iconStyles} />
             default:
                 return <Image source={require('./res/atmosphere.png')} style={styles.iconStyles} />
-
         }
     }
 
@@ -57,12 +52,12 @@ class CurrentWeather extends PureComponent {
                 {({ mainCity, temperatureUnit, weatherData }) => {
                     return (
                         <View>
-                            <View style={{ flexDirection: "row" }}>
+                            <View style={styles.firstSection}>
                                 <Text style={styles.cityNameStyles}>City: {mainCity.city}</Text>
                             </View>
-                            <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                            <View style={styles.secondSection}>
                                 {this.generateWeatherIcon(weatherData.main)}
-                                <Text style={{ fontSize: 20, textAlign: 'right' }}>
+                                <Text style={styles.temperatureText}>
                                     Temperature: {this.calculateTemperatureUnit(weatherData.temp, temperatureUnit)}
                                 </Text>
                                 <Text style={styles.textStyles}>Clouds: {weatherData.clouds} %</Text>
@@ -89,8 +84,18 @@ const styles = {
     iconStyles: {
         height: 300,
         width: 300,
+    }, firstSection: {
+        flexDirection: "row"
+    },
+    secondSection: {
+        justifyContent: 'center',
+        alignContent: 'center',
+        alignItems: 'center'
+    },
+    temperatureText: {
+        fontSize: 20,
+        textAlign: 'right'
     }
-
 }
 export default CurrentWeather;
 

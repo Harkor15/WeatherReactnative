@@ -1,6 +1,5 @@
 const axios = require('axios');
 
-
 export default class AxiosController {
     static getCityInfo(lon, lat) {
 
@@ -13,8 +12,6 @@ export default class AxiosController {
         axios.post(
             'https://api.openweathermap.org/data/2.5/weather?appid=73ce5a6d43a2c4278462796311770958&lat=' + lat + '&lon=' + lon)
             .then(function (response) {
-                console.log("R-E-S-P-O-N-S-E", response)
-
                 let weatherObject = {
                     main: response.data.weather[0].main,
                     temp: response.data.main.temp,
@@ -22,10 +19,9 @@ export default class AxiosController {
                     humidity: response.data.main.humidity,
                     wind: response.data.wind.speed,
                     clouds: response.data.clouds.all,
-
                 }
                 setWeatherData(weatherObject);
-                console.log("Data from response",weatherObject)
+                console.log("Data from response", weatherObject)
             }
             )
             .catch(function (error) {
@@ -44,9 +40,7 @@ export default class AxiosController {
                 for (let i = 0; i < 40; i++) {
                     let subTime = response.data.list[i].dt_txt;
                     subTime = subTime.substring(0, 16);
-                    
-                    let key="key"+i;
-                    
+                    let key = "key" + i;
                     forecastObject.weatherList.push({
                         key: key,
                         temp: response.data.list[i].main.temp,
@@ -60,17 +54,16 @@ export default class AxiosController {
                     })
                 }
                 setForecastData(forecastObject);
-                //console.log("R_E_S_P_O_N_S_E", forecastObject)
             })
             .catch(function (error) {
                 console.log('E_R_R_O_R', error)
             })
     }
-    
-    static addNewCityFromName = async (name,setNewCitysList)=> {
+
+    static addNewCityFromName = async (name, setNewCitysList) => {
         axios.post(`https://nominatim.openstreetmap.org/search?format=json&city=${name}`)
             .then(function (response) {
-                let responseArray=response.data.length;
+                let responseArray = response.data.length;
                 let geocodingResponse = {
                     placesList: []
                 }
@@ -83,7 +76,6 @@ export default class AxiosController {
                     })
                 }
                 setNewCitysList(geocodingResponse)
-                
             })
             .catch(function (error) {
                 console.log('E-R-R-O-R', error)

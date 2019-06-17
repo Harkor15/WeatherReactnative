@@ -1,12 +1,8 @@
-import { View, Text, Picker, TextInput, TouchableOpacity, FlatList, ToastAndroid, Image } from 'react-native';
+import { View, Text, Picker, TextInput, TouchableOpacity, FlatList, ToastAndroid, Image, StyleSheet } from 'react-native';
 import React, { PureComponent } from 'react';
 import { AppConsumer } from './AppContext';
 import RealmDB from './services/RealmDB';
 import AxiosController from './services/AxiosController';
-
-
-
-
 
 class SettingsScreen extends PureComponent {
     constructor(props) {
@@ -25,7 +21,6 @@ class SettingsScreen extends PureComponent {
     updateCity = () => { };
 
     onAddToFavorites = () => {
-
         if (this.state.text != '') {
             AxiosController.addNewCityFromName(this.state.text.trim(), this.setNewCitiesList)
         }
@@ -34,7 +29,7 @@ class SettingsScreen extends PureComponent {
     setNewCitiesList = (geocodingResponse) => {
         if (geocodingResponse.placesList.length == 0) {
             ToastAndroid.show('City not found', ToastAndroid.SHORT);
-        }else {
+        } else {
             let newCity = {
                 city: geocodingResponse.placesList[0].name,
                 longitude: parseFloat(geocodingResponse.placesList[0].lon),
@@ -62,12 +57,12 @@ class SettingsScreen extends PureComponent {
     }
 
     deleteFromFavouriteCities = (item) => {
-        if(this.state.favouriteCities.length<2){
+        if (this.state.favouriteCities.length < 2) {
             ToastAndroid.show("Add another city first", ToastAndroid.SHORT);
-        }else{
+        } else {
             RealmDB.deleteCity(item, this.getFavouriteCities)
         }
-        
+
     }
 
     setMainCity = (item) => {
@@ -89,16 +84,15 @@ class SettingsScreen extends PureComponent {
                 {({ temperatureUnit, getTemperatureUnit, setTemperatureUnit, updateCity }) => {
                     this.getTemperatureUnit = getTemperatureUnit;
                     this.updateCity = updateCity;
-                    console.log(this.state.favouriteCities, "favouriteCities");
                     return (
-                        <View style={{ flex: 1 }}>
-                            <Text style={{ fontSize: 25, textAlign: "center", marginBottom: 5 }}>Settings</Text>
+                        <View style={styles.fullFlex}>
+                            <Text style={styles.title}>Settings</Text>
                             <View style={styles.rowStyle}>
                                 <Text style={styles.textStyle}>Temperature unit:</Text>
                                 <Picker selectedValue={temperatureUnit}
                                     onValueChange={(itemValue, itemIndex) =>
                                         setTemperatureUnit(itemValue)}
-                                    style={{ height: 50, width: 100, marginLeft: 5 }}>
+                                    style={styles.picker}>
                                     <Picker.Item label="C" value='C' />
                                     <Picker.Item label="K" value='K' />
                                     <Picker.Item label="F" value='F' />
@@ -106,45 +100,33 @@ class SettingsScreen extends PureComponent {
                             </View>
                             <View style={styles.rowStyle}>
                                 <Text style={styles.textStyle}>Add city to favourites:</Text>
-                                <TextInput style={{ width: 100 }} placeholder="New city"
+                                <TextInput style={styles.textInput} placeholder="New city"
                                     onChangeText={(text) => this.setState({ text })} />
                                 <TouchableOpacity
-                                    style={{
-                                        padding: 5, borderWidth: 3, borderColor: 'darkGreen',
-                                        borderRadius: 5, backgroundColor: 'green'
-                                    }}
+                                    style={styles.addButton}
                                     onPress={this.onAddToFavorites}>
-                                    <Text style={{ color: 'white' }}>+</Text>
+                                    <Text style={styles.addButtonText}>+</Text>
                                 </TouchableOpacity>
                             </View>
-                            <View style={{
-                                flexDirection: "row", alignItems: "center",
-                                justifyContent: 'space-between'
-                            }}>
-                                <Text style={{ fontSize: 22 }}>Favourites</Text>
+                            <View style={styles.favouritesSection}>
+                                <Text style={styles.favouritesSectionText}>Favourites</Text>
 
                             </View>
                             <FlatList
                                 data={this.state.favouriteCities}
                                 renderItem={({ item }) => {
                                     return (
-                                        <View style={{
-                                            flexDirection: 'row', margin: 3, fontSize: 20, padding: 5,
-                                            borderColor: 'darkGreen', borderWidth: 3, borderRadius: 5
-                                        }}>
+                                        <View style={styles.itemMainView}>
                                             <TouchableOpacity
-                                                style={{
-                                                    flex: 1, flexDirection: 'row',
-                                                    justifyContent: 'space-between'
-                                                }}
+                                                style={styles.itemTouchable}
                                                 onPress={() => this.setMainCity(item)}>
-                                                <Text style={{}}>{item.city}</Text>
+                                                <Text>{item.city}</Text>
                                                 {this.getMainIcon(item.mainCityFlag)}
                                             </TouchableOpacity>
                                             <TouchableOpacity
-                                                style={{ alignItems: 'center', flex: 0.15 }}
+                                                style={styles.deleteButton}
                                                 onPress={() => this.deleteFromFavouriteCities(item)}>
-                                                <Text style={{ color: 'red' }}> X </Text>
+                                                <Text style={styles.deleteButtonText}> X </Text>
                                             </TouchableOpacity>
                                         </View>
                                     );
@@ -158,7 +140,7 @@ class SettingsScreen extends PureComponent {
     }
 }
 
-const styles = {
+const styles = StyleSheet.create({
     textStyle: {
         marginLeft: 5,
         fontSize: 20
@@ -170,7 +152,62 @@ const styles = {
     starIcon: {
         height: 20,
         width: 20
+    },
+    fullFlex: {
+        flex: 1
+    },
+    title: {
+        fontSize: 25,
+        textAlign: "center",
+        marginBottom: 5
+    },
+    picker: {
+        height: 50,
+        width: 100,
+        marginLeft: 5
+    },
+    textInput: {
+        width: 100
+    },
+    addButton: {
+        padding: 5,
+        borderWidth: 3,
+        borderColor: '#006400',
+        borderRadius: 5,
+        backgroundColor: 'green'
+    },
+    addButtonText: {
+        color: 'white'
+    },
+    favouritesSection: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: 'space-between'
+    },
+    favouritesSectionText: {
+        fontSize: 22
+    },
+    itemMainView: {
+        flexDirection: 'row',
+        margin: 3,
+        fontSize: 20,
+        padding: 5,
+        borderColor: '#006400',
+        borderWidth: 3,
+        borderRadius: 5
+    },
+    itemTouchable: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    deleteButton: {
+        alignItems: 'center',
+        flex: 0.15
+    },
+    deleteButtonText: {
+        color: 'red'
     }
-}
+});
 
 export default SettingsScreen;

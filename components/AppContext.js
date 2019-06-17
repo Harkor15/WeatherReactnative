@@ -28,10 +28,8 @@ const AppContext = React.createContext({
   getMainCity: () => null,
   setMainCity: () => null,
   updateCity: () => null,
-
   ...defaults
 });
-
 
 export const AppConsumer = AppContext.Consumer;
 
@@ -73,7 +71,6 @@ export class AppProvider extends Component {
       (error) => alert(error.message),
       { enableHighAccurancy: false, timeout: 20000, maximumAge: 10000 }
     )
-
   }
 
   updateCity = (city) => {

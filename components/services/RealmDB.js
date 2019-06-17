@@ -30,7 +30,6 @@ export default class RealmDB {
                 } else {
                     showAddCityDialog();
                 }
-
             })
             .catch(error => {
                 console.log(error);
